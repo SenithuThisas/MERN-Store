@@ -1,5 +1,5 @@
 import mangoose from "mongoose";
-const productSchema = mangoose.Schema({
+const productSchema = new mangoose.Schema({
     name: {
         type: String,
         required: true,
