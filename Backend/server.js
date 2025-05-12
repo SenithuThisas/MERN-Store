@@ -13,6 +13,16 @@ const app = express();
 
 app.use(express.json()); //allows us to acccept JASON data in the body of the req.body
 
+app.get("/api/products", async (req, res) => {
+  try {
+    const products = await Product.find({});
+    res.status(200).json({ success: true, data: products });
+  } catch (error) {
+    console.error("Error in fetching products:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 app.post("/api/products", async (req, res) => {
   const product = req.body;
   // Here you would typically save the product to your database
@@ -31,19 +41,20 @@ app.post("/api/products", async (req, res) => {
   }
 });
 
+//delete products
+
 app.delete("/api/products/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedProduct = await Product.findByIdAndDelete(id);
-    if (!deletedProduct) {
-      return res.status(404).json({ success: false, message: "Product not found" });
-    }
-    res.status(200).json({ success: true, data: deletedProduct });
-  } catch (error) {
+    await Product.findByIdAndDelete(id);
+    res.status(200).json({ success: true, message: "Product deleted successfully" }); 
+  }catch (error) {
     console.error("Error in deleting product:", error);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(404).json({ success: false, message: "Product not found" });
   }
 });
+
+
 
 app.listen(5000, () => {
   connectDB();
