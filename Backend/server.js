@@ -23,6 +23,24 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
+app.put("/api/products/:id", async (req, res) => {
+  const { id } = req.params;
+  const productData = req.body;
+
+  try { 
+    const updatedProduct = await Product.findByIdAndUpdate(id, productData, { new: true });
+    
+    if (!updatedProduct) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+
+    res.status(200).json({ success: true, data: updatedProduct });
+  } catch (error) {
+    console.error("Error in updating product:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 app.post("/api/products", async (req, res) => {
   const product = req.body;
   // Here you would typically save the product to your database
