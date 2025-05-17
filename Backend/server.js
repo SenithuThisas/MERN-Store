@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.use("/api/products", productRoutes);
 
-app.listen(5000, () => {
+app.listen(PORT, () => {
   connectDB();
   console.log("Server started at http://localhost:"+ PORT);
 });
